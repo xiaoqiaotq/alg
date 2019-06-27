@@ -1,5 +1,6 @@
 package org.xiaoqiaotq.tree;
 
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -27,7 +28,10 @@ public class BST<T extends Comparable<T>> {
 //        }
         //range query
         bst.rangeQuery(root, 80, 100);
-        
+        System.err.println("================");
+//        bst.levelOrder(root);
+        bst.constructTreeInLevelOrder();
+
     }
     //插入
     public TreeNode insert(TreeNode<T> root,T key) {
@@ -53,7 +57,6 @@ public class BST<T extends Comparable<T>> {
         }
         return root;
     }
-
 
     //中序遍历 O(n)
     public void inOrder(TreeNode root) {
@@ -83,18 +86,59 @@ public class BST<T extends Comparable<T>> {
         if (root == null) {
             return;
         }
-        if(min.compareTo(root.getKey()) < 0){
+        if( min.compareTo(root.getKey()) < 0){
             rangeQuery(root.getLeft(), min,max);
         }
         if (min.compareTo(root.getKey()) <= 0 && max.compareTo(root.getKey()) >= 0) {
             System.err.print(root.getKey()+", ");
         }
-        if(min.compareTo(root.getKey()) > 0 || max.compareTo(root.getKey()) > 0){
+        if( max.compareTo(root.getKey()) > 0){
             rangeQuery(root.getRight(), min,max);
         }
 
     }
 
+    //Breadth First or Level Order Traversal
+    public void levelOrder(TreeNode<T> root) {
+        LinkedList<TreeNode<T>> queue = new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            TreeNode temp = queue.poll();
+            System.err.println(temp.getKey());
+            if (temp.left != null) {
+                queue.add(temp.left);
+            }
+            if (temp.right != null) {
+                queue.add(temp.right);
+            }
+        }
+    }
+
+
+    //Breadth First or Level Order Traversal
+    public void constructTreeInLevelOrder() {
+        int[] arrs = {0, 1, 3, 4, 5, 6};
+        TreeNode<T> root = null;
+        LinkedList<TreeNode<T>> queue = new LinkedList<>();
+        for (int i = 0; i < arrs.length; i++) {
+            TreeNode treeNode = new TreeNode(arrs[i], null);
+            queue.add(treeNode);
+            TreeNode<T> parent = queue.peek();
+            if (root == null) {
+                root = treeNode;
+            }else if(parent.left==null){
+                parent.left = treeNode;
+            }else if(parent.right==null){
+                parent.right = treeNode;
+                queue.poll();
+            }
+        }
+        System.err.println("============level order===========");
+        levelOrder(root);
+        System.err.println("============in order===========");
+        inOrder(root);
+
+    }
     //比较复杂，情况比较多
     public void remove(TreeNode<T> root ,T key){
 
@@ -146,4 +190,6 @@ public class BST<T extends Comparable<T>> {
             this.value = value;
         }
     }
+
+
 }
