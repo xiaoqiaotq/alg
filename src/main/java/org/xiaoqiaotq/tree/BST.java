@@ -1,7 +1,6 @@
 package org.xiaoqiaotq.tree;
 
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 /**
  * binary search tree
@@ -10,7 +9,7 @@ import java.util.Random;
  */
 public class BST<T extends Comparable<T>> {
 //    static int[] arr = new int[]{1333,3,55,3223,13,13,1,2112,31231,12,1,4,43,355,2,23,414};
-    static int[] arr = new Random().ints(100,1,100).toArray();
+    static Integer[] arr = new Random().ints(100,1,100).boxed().distinct().toArray(Integer[]::new);
     static int[] randoms = new Random().ints(10,1,100).toArray();
     public static void main(String[] args) {
         BST<Integer> bst = new BST<>();
@@ -21,11 +20,15 @@ public class BST<T extends Comparable<T>> {
         }
         //遍历打印
         bst.inOrder(root);
+        System.err.println("=======treeset======");
+        // treeset
+        bst.treeSet(arr);
         //验证存在
 //        for (int i = 0; i < randoms.length; i++) {
 //            boolean exists = bst.exists(root, randoms[i]);
 //            System.err.println(randoms[i] + " " + exists);
 //        }
+        System.err.println("======range query=========");
         //range query
         bst.rangeQuery(root, 80, 100);
         System.err.println("================");
@@ -64,7 +67,7 @@ public class BST<T extends Comparable<T>> {
             return;
         }
         inOrder(root.getLeft());
-        System.err.println(root.getKey());
+        System.err.print(root.getKey()+", ");
         inOrder(root.getRight());
     }
     //存在否 O(n)
@@ -104,7 +107,7 @@ public class BST<T extends Comparable<T>> {
         queue.add(root);
         while(!queue.isEmpty()){
             TreeNode temp = queue.poll();
-            System.err.println(temp.getKey());
+            System.err.print(temp.getKey()+", ");
             if (temp.left != null) {
                 queue.add(temp.left);
             }
@@ -141,6 +144,13 @@ public class BST<T extends Comparable<T>> {
     }
     //比较复杂，情况比较多
     public void remove(TreeNode<T> root ,T key){
+
+    }
+
+    public void treeSet(T[] arrs){
+        TreeSet<T> treeSet = new TreeSet<>();
+        treeSet.addAll(Arrays.asList(arrs));
+        treeSet.forEach(s->System.err.print(s+", "));
 
     }
 
